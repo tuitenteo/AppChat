@@ -26,14 +26,15 @@ export default function ChatDetail() {
       // Chuyển đổi dữ liệu từ API để phù hợp với định dạng tin nhắn
       const formattedMessages = data.map(msg => ({
         ...msg,
-        is_sender: msg.sender_id === userId,
-        sender_username: msg.sender_username || (msg.sender_id === userId ? 'Bạn' : 'Người nhận'),
+        // dùng is_sender từ API, kh tính lại vì có thể ghi đè lên
       }));
+
       setMessages(formattedMessages);
       
     } catch (err) {
       console.error('Lỗi khi lấy tin nhắn:', err);
     }
+
   };
 
   // Auto scroll khi có tin nhắn mới
@@ -78,7 +79,7 @@ export default function ChatDetail() {
       id: Date.now(), // Tạo ID tạm thời
       content,
       is_sender: true,
-      is_deleted: false,
+      // is_deleted: false,
       isTemp: true, // Đánh dấu là tin nhắn tạm thời
       sender_username: 'Bạn',
     };
@@ -119,7 +120,6 @@ export default function ChatDetail() {
         <FlatList
           ref={flatListRef}
           data={sortedMessages}
-          // keyExtractor={(item) => item.id?.toString() || Math.random().toString()}
           keyExtractor={(item) => item.id.toString()}
           onScroll={handleScroll}
           onScrollBeginDrag={handleScrollBeginDrag}
@@ -202,18 +202,67 @@ const styles = StyleSheet.create({
     shadowRadius: 3,
     elevation: 1,
   },
-  senderMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#CDE8FF', // Xanh nhạt cho người gửi
-    marginRight: 10,
-  },
-  receiverMessage: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#fff', // trắng cho người nhận
-    marginLeft: 10,
-    borderWidth: 0.5,
-    borderColor: '#ddd',
-  },
+ senderMessage: {
+  alignSelf: 'flex-end', // Tin nhắn người gửi phải căn bên phải
+  backgroundColor: '#CDE8FF', // Màu nền xanh nhạt cho người gửi
+  marginRight: 10,  // Khoảng cách bên phải
+  padding: 10,      // Đảm bảo tin nhắn có khoảng cách
+  borderRadius: 16, // Bo tròn góc
+  maxWidth: '80%',  // Giới hạn chiều rộng tin nhắn để không quá dài
+  shadowColor: '#000', 
+  shadowOffset: { width: 0, height: 1 },
+  shadowOpacity: 0.1,
+  shadowRadius: 3,
+  elevation: 1, // Thêm hiệu ứng cho Android
+},
+
+receiverMessage: {
+  alignSelf: 'flex-start',  // Tin nhắn người nhận phải căn bên trái
+  backgroundColor: '#fff',  // Màu nền trắng cho người nhận
+  marginLeft: 10,           // Khoảng cách bên trái
+  borderWidth: 0.5,
+  borderColor: '#ddd',
+  padding: 10,             // Đảm bảo tin nhắn có khoảng cách
+  borderRadius: 16,        // Bo tròn góc
+  maxWidth: '80%',         // Giới hạn chiều rộng tin nhắn để không quá dài
+},
+
+inputWrapper: {
+  flexDirection: 'row',
+  alignItems: 'center',
+  padding: 10,
+  paddingBottom: 50,
+  borderTopWidth: 1,
+  borderColor: '#eee',
+  backgroundColor: '#fff',
+},
+
+textInput: {
+  flex: 1,
+  paddingHorizontal: 12,
+  paddingVertical: 8,
+  borderWidth: 1,
+  borderColor: '#ccc',
+  borderRadius: 20,
+  backgroundColor: '#fff',
+  fontSize: 16,
+},
+
+sendButton: {
+  backgroundColor: '#007AFF', // Màu xanh cho nút gửi
+  paddingVertical: 10,
+  paddingHorizontal: 16,
+  borderRadius: 24,
+  marginLeft: 8,
+  justifyContent: 'center',
+  alignItems: 'center',
+},
+
+sendButtonText: {
+  color: '#FFF',
+  fontWeight: '600',
+},
+
   senderName: {
     fontWeight: '500',
     fontSize: 12,
@@ -225,37 +274,37 @@ const styles = StyleSheet.create({
     color: '#222',
     lineHeight: 22,
   },
-  inputWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    paddingBottom: 50,
-    borderTopWidth: 1,
-    borderColor: '#eee',
-    backgroundColor: '#fff',
-  },
-  textInput: {
-    flex: 1,
-    paddingHorizontal: 12,
-    paddingVertical: 8,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 20,
-    backgroundColor: '#fff',
-    fontSize: 16,
-  },
+  // inputWrapper: {
+  //   flexDirection: 'row',
+  //   alignItems: 'center',
+  //   padding: 10,
+  //   paddingBottom: 50,
+  //   borderTopWidth: 1,
+  //   borderColor: '#eee',
+  //   backgroundColor: '#fff',
+  // },
+  // textInput: {
+  //   flex: 1,
+  //   paddingHorizontal: 12,
+  //   paddingVertical: 8,
+  //   borderWidth: 1,
+  //   borderColor: '#ccc',
+  //   borderRadius: 20,
+  //   backgroundColor: '#fff',
+  //   fontSize: 16,
+  // },
   
-  sendButton: {
-    backgroundColor: '#007AFF', // xanh iOS
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 24,
-    marginLeft: 8,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  sendButtonText: {
-    color: '#FFF',
-    fontWeight: '600',
-  },
+  // sendButton: {
+  //   backgroundColor: '#007AFF', // xanh iOS
+  //   paddingVertical: 10,
+  //   paddingHorizontal: 16,
+  //   borderRadius: 24,
+  //   marginLeft: 8,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
+  // sendButtonText: {
+  //   color: '#FFF',
+  //   fontWeight: '600',
+  // },
 });
