@@ -19,14 +19,19 @@ export default function Login() {
 
     try {
       const data = await loginUser(username, password);
-      login(data.token);
-      Alert.alert('Đăng nhập thành công!');
-    } catch (error) {
-      console.error(error);
-      Alert.alert('Sai tên đăng nhập hoặc mật khẩu');
+      if (data?.token && data?.userId) { 
+  await login(data.token, data.userId);
+
+}else {
+        alert('Thông tin đăng nhập không hợp lệ');
+      }
+      console.log('Login response data:', data);
+
+    } catch (err) {
+      console.error('Lỗi đăng nhập:', err);
+      alert('Có lỗi khi đăng nhập');
     }
   };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Chat</Text>
