@@ -13,7 +13,7 @@ import { getConversations } from '../services/api';
 import { useFocusEffect } from '@react-navigation/native';
 
 export default function Chat({ navigation }) {
-  const { token, logout } = useAuth();
+  const { token, logout, userId } = useAuth();
   const [conversations, setConversations] = useState([]);
   const [showSettings, setShowSettings] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -118,6 +118,7 @@ export default function Chat({ navigation }) {
           </TouchableOpacity>
         </View>
       )}
+      
 
       <TouchableOpacity
         onPress={() => navigation.navigate('Tìm kiếm')}
