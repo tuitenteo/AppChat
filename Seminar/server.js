@@ -84,7 +84,7 @@ app.post("/api/login", async (req, res) => {
   if (!match) return res.status(401).json({ error: "Wrong password" });
 
   const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: "1h" });
-  res.json({ token });
+  res.json({ token, userId: user.id  });
 });
 
 // xem thông tin acc của mình
